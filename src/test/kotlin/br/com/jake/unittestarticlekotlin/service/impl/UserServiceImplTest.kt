@@ -1,6 +1,5 @@
 package br.com.jake.unittestarticlekotlin.service.impl
 
-import br.com.jake.unittestarticlekotlin.config.UserIsValidBuilder
 import br.com.jake.unittestarticlekotlin.model.User
 import br.com.jake.unittestarticlekotlin.model.UserIsValid
 import br.com.jake.unittestarticlekotlin.repository.UserRepository
@@ -26,27 +25,28 @@ class UserServiceImplTest {
 
         //mockando as entradas e saídas esperadas
         val userExpected = User(1L, "Francisco", "")
-        val mockUserBuild = UserIsValidBuilder.builder().build()
+        val mockUserIsValid = Mockito.mock(UserIsValid::class.java)
 
 
         //fazendo o mock static para exacutar a ação
-        Mockito.mockStatic(UserIsValidBuilder::class.java, Mockito.RETURNS_DEEP_STUBS)
+        Mockito.mockStatic(UserIsValid::class.java, Mockito.RETURNS_DEEP_STUBS)
             .use { userValid ->
 
                 userValid.`when`<UserIsValid> {
-                    UserIsValidBuilder.builder().build().userValidation(userExpected)
-                }.thenReturn(mockUserBuild)
+                    UserIsValid.builder().build()
+                }.thenReturn(mockUserIsValid)
 
-                Mockito.doReturn(userExpected)
-                    .`when`(userService).userSave(userExpected)
 
-                Mockito.doNothing().`when`(userRepository).save(userExpected)
+                Mockito.doReturn(true)
+                    .`when`(mockUserIsValid).userValidation(userExpected)
+
+                Mockito.doReturn(userExpected).`when`(userRepository).save(userExpected)
+
+                Mockito.`when`(userService.userSave(userExpected)).thenReturn(userExpected)
 
                 //verificando o resultado
                 assertEquals(userExpected, userService.userSave(userExpected))
             }
-
-
     }
 
 }

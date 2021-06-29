@@ -1,8 +1,8 @@
 package br.com.jake.unittestarticlekotlin.service.impl
 
 
-import br.com.jake.unittestarticlekotlin.config.UserIsValidBuilder
 import br.com.jake.unittestarticlekotlin.model.User
+import br.com.jake.unittestarticlekotlin.model.UserIsValid
 import br.com.jake.unittestarticlekotlin.repository.UserRepository
 import br.com.jake.unittestarticlekotlin.service.UserService
 import org.springframework.stereotype.Service
@@ -21,7 +21,7 @@ class UserServiceImpl(val userRepository: UserRepository) : UserService {
     }
 
     override fun userSave(user: User): User {
-        var build = UserIsValidBuilder.builder().build()
+        var build = UserIsValid.builder().build()
         if (!build.userValidation(user)) {
             throw Exception("Address Not Valid")
         }
