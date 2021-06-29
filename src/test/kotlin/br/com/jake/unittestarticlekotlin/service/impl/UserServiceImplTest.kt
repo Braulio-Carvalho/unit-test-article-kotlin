@@ -26,15 +26,16 @@ class UserServiceImplTest {
 
         //mockando as entradas e saídas esperadas
         val userExpected = User(1L, "Francisco", "")
-        val mockUserBuild = UserIsValidBuilder.builder().build()
+        val mockUserBuild = UserIsValidBuilder.builder()
+        val mockUserBuilder = UserIsValid()
 
 
         //fazendo o mock static para exacutar a ação
         Mockito.mockStatic(UserIsValidBuilder::class.java, Mockito.RETURNS_DEEP_STUBS)
             .use { userValid ->
 
-                userValid.`when`<UserIsValid> {
-                    UserIsValidBuilder.builder().build().userValidation(userExpected)
+                userValid.`when`<UserIsValidBuilder> {
+                    UserIsValidBuilder.builder().build()
                 }.thenReturn(mockUserBuild)
 
                 Mockito.doReturn(userExpected)
@@ -43,7 +44,7 @@ class UserServiceImplTest {
                 Mockito.doNothing().`when`(userRepository).save(userExpected)
 
                 //verificando o resultado
-                assertEquals(userExpected, userService.userSave(userExpected))
+                assertEquals(User(1L, "Francisco", ""), userService.userSave(userExpected))
             }
 
 
