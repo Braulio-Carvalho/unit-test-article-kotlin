@@ -42,8 +42,6 @@ class UserServiceImplTest {
 
                 Mockito.doReturn(userExpected).`when`(userRepository).save(userExpected)
 
-                Mockito.`when`(userService.userSave(userExpected)).thenReturn(userExpected)
-
                 //verificando o resultado
                 assertEquals(userExpected, userService.userSave(userExpected))
             }
